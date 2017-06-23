@@ -1,0 +1,41 @@
+﻿<Window x:Class="KomicAheGao.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:KomicAheGao.UI"
+        
+        Title="KomicAheGao"  Icon="Icon/icon_app.ico"
+        MaxHeight="370"
+        MinWidth="330"
+        SizeToContent="WidthAndHeight" WindowStyle="ToolWindow" Topmost="True" ShowInTaskbar="False"
+        IsVisibleChanged="On_Window_IsVisibleChanged" 
+        SourceInitialized="On_Window_SourceInitialized" Loaded="On_Window_Loaded" Closing="On_Window_Closing" PreviewKeyDown="On_Window_PreviewKeyDown">
+    <Window.Resources>
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}"/>
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="{x:Static SystemColors.HighlightTextColor}"/>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="LB_Gaos">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ui:UC_Gao_Item Margin="0,3"></ui:UC_Gao_Item>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ListBox x:Name="LB_ClipItems" Visibility="Collapsed">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ui:UC_Clipboard_Item Margin="0,3"></ui:UC_Clipboard_Item>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBox x:Name="TXTBOX_Search" Grid.Row="1" VerticalAlignment="Center" Margin="5,0" 
+                 TextChanged="On_TXTBOX_Search_TextChanged"></TextBox>
+    </Grid>
+</Window>

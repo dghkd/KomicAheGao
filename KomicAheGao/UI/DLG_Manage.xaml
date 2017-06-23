@@ -1,0 +1,101 @@
+﻿<Window x:Class="KomicAheGao.UI.DLG_Manage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="clr-namespace:KomicAheGao.UI" 
+        Title="管理" Height="400" Width="800" Icon="/Icon/icon_app.ico"
+        WindowStartupLocation="CenterScreen" Topmost="False">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Edit Field-->
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="名稱:" VerticalAlignment="Top"/>
+            <TextBox x:Name="TXT_Name" Height="23" Margin="10,30,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+            <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="文字:" VerticalAlignment="Top" Grid.Row="1"/>
+            <TextBox x:Name="TXT_Text" Margin="10,22,5,5" TextWrapping="Wrap" AcceptsReturn="True" Grid.Row="1"/>
+        </Grid>
+
+        <!--Operation button Field-->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="95*"/>
+            </Grid.RowDefinitions>
+            
+            <StackPanel Grid.Row="2">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="0,5,0,0"></Setter>
+                    </Style>
+                </StackPanel.Resources>
+
+                <!-- ">>" Add -->
+                <Button Content="&gt;&gt; 新增" ToolTip="新增"
+                        Click="On_BTN_Add_Click"/>
+
+                <!-- "->" Insert -->
+                <Button Content="-&gt; 插入" ToolTip="插入"
+                        Click="On_BTN_Insert_Click"/>
+                
+                <!-- " >" Replace -->
+                <Button Content=" &gt; 覆蓋" ToolTip="覆蓋"
+                        Click="On_BTN_Replace_Click"/>
+
+                <!-- "< " Load -->
+                <Button Content="&lt;  讀取" ToolTip="讀取"
+                        Click="On_BTN_Load_Click" />
+                
+                <!-- "<<" Delete -->
+                <Button Content="&lt;&lt; 刪除" ToolTip="刪除"
+                        Margin="0,50,0,0"
+                        Click="On_BTN_Del_Click" />
+                
+            </StackPanel>
+            
+        </Grid>
+
+        <!--Gao Data Field-->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="10,10,0,0"></Setter>
+                        <Setter Property="Width" Value="55"></Setter>
+                        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Content="置頂" Click="On_BTN_MoveTop_Click" />
+                <Button Content="上移" Click="On_BTN_MoveUp_Click" />
+                <Button Content="下移" Click="On_BTN_MoveDown_Click" />
+                <Button Content="置底" Click="On_BTN_MoveBottom_Click" />
+            </StackPanel>
+
+            <ListBox x:Name="LB_Gaos" Margin="10,7,0,0" Grid.Row="1">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" Margin="5" Height="22" TextWrapping="NoWrap"></TextBlock>
+                            <TextBlock Text="{Binding Text}" ToolTip="{Binding Text}" Margin="5" Height="22" TextWrapping="NoWrap"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+
+        </Grid>
+    </Grid>
+</Window>

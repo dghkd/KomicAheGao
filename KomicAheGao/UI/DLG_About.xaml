@@ -1,0 +1,24 @@
+﻿<Window x:Class="KomicAheGao.UI.DLG_About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KomicAheGao.UI"
+        mc:Ignorable="d"
+        Title="關於" Icon="/Icon/icon_app.ico"
+        Width="450" Height="200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Grid x:Name="LayoutRoot">
+        <!--Add Viewbox to auto resize the font size-->
+        <Viewbox Grid.Column="1" Margin="20,0,0,0" VerticalAlignment="Top" Height="32" MouseLeftButtonUp="On_Viewbox_MouseLeftButtonUp">
+            <TextBlock x:Name="TXT_Production"  TextWrapping="Wrap"  FontWeight="Bold" />
+        </Viewbox>
+
+        <TextBlock Margin="10,40,10,40" TextWrapping="Wrap"
+                   Text="作者很懶，還沒想到要寫什麼。"></TextBlock>
+        
+        <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <TextBlock x:Name="TXT_Version" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+            <TextBlock x:Name="TXT_Copyright"/>
+        </StackPanel>
+    </Grid>
+</Window>
