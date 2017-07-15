@@ -62,6 +62,7 @@ namespace KomicAheGao.ViewModel
         private ImageSource _imgSource;
 
         private Dictionary<String, Object> _dict;
+        private List<String> _fileDropList;
         #endregion
 
 
@@ -70,6 +71,7 @@ namespace KomicAheGao.ViewModel
         public ClipboardVM(IDataObject dataObject)
         {
             _dict = new Dictionary<String, Object>();
+            _fileDropList = new List<String>();
 
             foreach (string format in dataObject.GetFormats())
             {
@@ -81,7 +83,6 @@ namespace KomicAheGao.ViewModel
             {
                 this.Type = ClipboardVM.GetDataType(ClipboardVM.TYPE_RICHTEXT);
                 this.TxtContent = _dict[ClipboardVM.TYPE_RICHTEXT].ToString();
-                
             }
 
             if (_dict.ContainsKey(ClipboardVM.TYPE_OEMTEXT)
@@ -98,27 +99,19 @@ namespace KomicAheGao.ViewModel
                 || _dict.ContainsKey(ClipboardVM.TYPE_FILE_NAME)
                 || _dict.ContainsKey(ClipboardVM.TYPE_FILE_NAME_W))
             {
-                String[] path = _dict[ClipboardVM.TYPE_FILE_NAME_W] as String[];
-                if (path != null)
+                String[] paths = _dict[ClipboardVM.TYPE_FILE_NAME_W] as String[];
+                if (paths != null)
                 {
                     this.Name = ClipboardVM.TYPE_FILE_NAME;
                     this.Type = ClipboardVM.GetDataType(ClipboardVM.TYPE_FILE_NAME_W);
-                    this.TxtContent = path.ElementAtOrDefault(0);
+                    this.TxtContent = paths.ElementAtOrDefault(0);
+                    _fileDropList.Clear();
+                    foreach (String f in paths)
+                    {
+                        _fileDropList.Add(f);
+                    }
                 }
             }
-
-            if (_dict.ContainsKey(ClipboardVM.TYPE_HTML))
-            {
-                this.Type = ClipboardVM.GetDataType(ClipboardVM.TYPE_HTML);
-                //this.TxtContent = _dict[ClipboardVM.TYPE_HTML].ToString();
-            }
-
-            //if (_dict.ContainsKey(ClipboardVM.TYPE_LOCALE))
-            //{
-            //    this.Name = ClipboardVM.TYPE_LOCALE;
-            //    this.Type = ClipboardVM.GetDataType(ClipboardVM.TYPE_LOCALE);
-            //    this.TxtContent = _dict[ClipboardVM.TYPE_LOCALE].ToString();
-            //}
             
             if (_dict.ContainsKey(ClipboardVM.TYPE_DRAWING_BITMAP)
                 || _dict.ContainsKey(ClipboardVM.TYPE_BITMAP)
@@ -214,6 +207,15 @@ namespace KomicAheGao.ViewModel
             {
                 this.CommandAction(cmd, this);
             }
+            System.Threading.Thread receive = new System.Threading.Thread(on_thread);
+            receive.Abort();
+            
+            
+        }
+
+        private void on_thread()
+        {
+            
         }
         #endregion
 
@@ -255,6 +257,47 @@ namespace KomicAheGao.ViewModel
             return ClipboardDataType.Unknown;
         }
 
+        public static byte[] ToByteArray(object source)
+        {
+            var Formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            using (var stream = new System.IO.MemoryStream())
+            {
+                Formatter.Serialize(stream, source);
+                return stream.ToArray();
+            }
+        }
+
+        public bool Compare(ClipboardVM vm)
+        {
+            if (vm == null)
+            {
+                return false;
+            }
+
+            if (this.Type != vm.Type)
+            {
+                return false;
+            }
+
+            if (this.TxtContent != vm.TxtContent)
+            {
+                return false;
+            }
+
+            if (vm.Type == ClipboardDataType.File)
+            {
+                return _fileDropList.SequenceEqual(vm._fileDropList);
+            }
+
+            if (vm.Type == ClipboardDataType.Bitmap)
+            {
+                byte[] x = ClipboardVM.ToByteArray(vm.ImgSource);
+                byte[] y = ClipboardVM.ToByteArray(this.ImgSource);
+                return x.SequenceEqual(y);
+            }
+
+            return true;
+        }
         #endregion
     }
 }

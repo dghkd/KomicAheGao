@@ -20,6 +20,7 @@ using System.Data;
 using System.Threading;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using System.Xml.Serialization;
 
 using KomicAheGao.UI;
 using KomicAheGao.ViewModel;
@@ -43,13 +44,13 @@ namespace KomicAheGao
         private System.Threading.Timer _skipClipTimer;
         #endregion
 
+
         #region Constructor
 
         public MainWindow()
         {
             InitializeComponent();
             _shutdown = false;
-
 
             //Init skip clipboard update event flag and timer.
             _skipClipUpdate = false;
@@ -163,17 +164,35 @@ namespace KomicAheGao
         {
             if (_skipClipUpdate == false)
             {
-                SkipClipboardUpdate(500);
                 try
                 {
-                    ClipboardVM vm = new ClipboardVM(System.Windows.Forms.Clipboard.GetDataObject());
-                    if (vm != null)
+                    Dictionary<String, Object> dict = new Dictionary<String, Object>();
+                    var dataObject = System.Windows.Forms.Clipboard.GetDataObject();
+                    ClipboardVM vm = new ClipboardVM(dataObject);
+                    ClipboardVM lastVM = _clipColle.ElementAtOrDefault(0);
+                    if (lastVM != null && vm != null)
                     {
-                        vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
-                        _clipColle.Insert(0, vm);
-                        while (_clipColle.Count > 100)
+                        bool bSame = lastVM.Compare(vm);
+                        if (!bSame)
                         {
-                            _clipColle.RemoveAt(100);
+                            vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
+                            _clipColle.Insert(0, vm);
+                            while (_clipColle.Count > Properties.Settings.Default.ClipBoardCount)
+                            {
+                                _clipColle.RemoveAt(Properties.Settings.Default.ClipBoardCount);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (lastVM == null)
+                        {
+                            vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
+                            _clipColle.Insert(0, vm);
+                            while (_clipColle.Count > 100)
+                            {
+                                _clipColle.RemoveAt(100);
+                            }
                         }
                     }
                 }
@@ -359,10 +378,11 @@ namespace KomicAheGao
             if (_hwndSrc != null)
             {
                 bool ret = Win32Helper.UnregisterHotKey(_hwndSrc.Handle, 1);
+
+                //Remove Clipboard listener.
+                Win32Helper.RemoveClipboardFormatListener(_hwndSrc.Handle);
             }
 
-            //Remove Clipboard listener.
-            Win32Helper.RemoveClipboardFormatListener(_hwndSrc.Handle);
 
             _shutdown = true;
             System.Windows.Application.Current.Shutdown();
@@ -528,6 +548,7 @@ namespace KomicAheGao
             _skipClipTimer.Change(millisecond, Timeout.Infinite);
         }
         #endregion
+        
 
     }
 }

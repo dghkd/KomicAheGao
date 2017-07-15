@@ -22,5 +22,17 @@ namespace KomicAheGao.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ClipBoardCount {
+            get {
+                return ((int)(this["ClipBoardCount"]));
+            }
+            set {
+                this["ClipBoardCount"] = value;
+            }
+        }
     }
 }

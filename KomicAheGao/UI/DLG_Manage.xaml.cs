@@ -28,6 +28,7 @@ namespace KomicAheGao.UI
             InitializeComponent();
             _colle = GaoData.Data.GetCollection();
             LB_Gaos.ItemsSource = _colle;
+            TXTBOX_ClipboardCount.Text = Convert.ToString(Properties.Settings.Default.ClipBoardCount);
         }
 
         private void On_BTN_Add_Click(object sender, RoutedEventArgs e)
@@ -132,6 +133,31 @@ namespace KomicAheGao.UI
             {
                 TXT_Name.Text = vm.Name;
                 TXT_Text.Text = vm.Text;
+            }
+        }
+
+        private void On_TXTBOX_ClipboardCount_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            int count = 0;
+            if (!Int32.TryParse(e.Text, out count))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void On_TXTBOX_ClipboardCount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int count = Properties.Settings.Default.ClipBoardCount;
+            if (TXTBOX_ClipboardCount.Text == "")
+            {
+                TXTBOX_ClipboardCount.Text = Convert.ToString(count);
+                return;
+            }
+
+            if (Int32.TryParse(TXTBOX_ClipboardCount.Text, out count))
+            {
+                Properties.Settings.Default.ClipBoardCount = count;
+                Properties.Settings.Default.Save();
             }
         }
     }
