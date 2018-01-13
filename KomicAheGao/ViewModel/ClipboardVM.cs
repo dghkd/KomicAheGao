@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace KomicAheGao.ViewModel
 {
@@ -59,6 +60,7 @@ namespace KomicAheGao.ViewModel
         private String _toolTip;
         private ClipboardDataType _type;
         private String _txtContent;
+        private int _dataObjectCount;
         private ImageSource _imgSource;
 
         private Dictionary<String, Object> _dict;
@@ -76,8 +78,11 @@ namespace KomicAheGao.ViewModel
             foreach (string format in dataObject.GetFormats())
             {
                 _dict.Add(format, dataObject.GetData(format));
+                Debug.WriteLine(String.Format("{0}, {1}", format, dataObject.GetData(format)));
             }
 
+            _dataObjectCount = _dict.Count;
+            this.Type = ClipboardDataType.Unknown;
 
             if (_dict.ContainsKey(ClipboardVM.TYPE_RICHTEXT))
             {
@@ -91,8 +96,8 @@ namespace KomicAheGao.ViewModel
                 || _dict.ContainsKey(ClipboardVM.TYPE_SYSTEM_STRING)
                 || _dict.ContainsKey(ClipboardVM.TYPE_CSV))
             {
-                this.Type= ClipboardVM.GetDataType(ClipboardVM.TYPE_UNICODETEXT);
-                this.TxtContent = _dict[ClipboardVM.TYPE_UNICODETEXT].ToString();
+                this.Type = ClipboardVM.GetDataType(ClipboardVM.TYPE_SYSTEM_STRING);
+                this.TxtContent = _dict[ClipboardVM.TYPE_SYSTEM_STRING].ToString();
             }
 
             if (_dict.ContainsKey(ClipboardVM.TYPE_FILE_DROP)
@@ -183,6 +188,14 @@ namespace KomicAheGao.ViewModel
 
             return ret;
         }
+
+
+        public int DataObjectCount
+        {
+            get { return _dataObjectCount; }
+            set { _dataObjectCount = value; OnPropertyChanged("DataObjectCount"); }
+        }
+
         #endregion
 
 

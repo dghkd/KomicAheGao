@@ -170,29 +170,23 @@ namespace KomicAheGao
                     var dataObject = System.Windows.Forms.Clipboard.GetDataObject();
                     ClipboardVM vm = new ClipboardVM(dataObject);
                     ClipboardVM lastVM = _clipColle.ElementAtOrDefault(0);
-                    if (lastVM != null && vm != null)
+                    if (vm.Type != ClipboardVM.ClipboardDataType.Unknown
+                        && vm.DataObjectCount != 0)
                     {
-                        bool bSame = lastVM.Compare(vm);
-                        if (!bSame)
+                        if (lastVM != null)
                         {
-                            vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
-                            _clipColle.Insert(0, vm);
-                            while (_clipColle.Count > Properties.Settings.Default.ClipBoardCount)
+                            bool bSame = lastVM.Compare(vm);
+                            if (bSame)
                             {
-                                _clipColle.RemoveAt(Properties.Settings.Default.ClipBoardCount);
+                                return;
                             }
                         }
-                    }
-                    else
-                    {
-                        if (lastVM == null)
+
+                        vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
+                        _clipColle.Insert(0, vm);
+                        while (_clipColle.Count > Properties.Settings.Default.ClipBoardCount)
                         {
-                            vm.CommandAction += On_ClipboardVM_CommandAction_Execute;
-                            _clipColle.Insert(0, vm);
-                            while (_clipColle.Count > 100)
-                            {
-                                _clipColle.RemoveAt(100);
-                            }
+                            _clipColle.RemoveAt(Properties.Settings.Default.ClipBoardCount);
                         }
                     }
                 }
