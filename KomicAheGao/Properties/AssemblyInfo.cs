@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("dghkd")]
 [assembly: AssemblyProduct("KomicAheGao")]
-[assembly: AssemblyCopyright("Copyright ©  2017  dghkd.  All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright ©  2018  dghkd.  All Rights Reserved")]
 [assembly: AssemblyTrademark("dghkd")]
 [assembly: AssemblyCulture("")]
 
@@ -51,5 +51,5 @@ using System.Windows;
 // 您可以指定所有的值，也可以依照以下的方式，使用 '*' 將組建和修訂編號
 // 指定為預設值: 
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.0.715")]
-[assembly: AssemblyFileVersion("2.0.0.715")]
+[assembly: AssemblyVersion("2.0.1.114")]
+[assembly: AssemblyFileVersion("2.0.1.114")]
