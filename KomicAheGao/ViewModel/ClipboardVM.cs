@@ -77,6 +77,11 @@ namespace KomicAheGao.ViewModel
 
             foreach (string format in dataObject.GetFormats())
             {
+                if (format == DataFormats.EnhancedMetafile)
+                {
+                    continue;
+                }
+
                 _dict.Add(format, dataObject.GetData(format));
                 Debug.WriteLine(String.Format("{0}, {1}", format, dataObject.GetData(format)));
             }
